@@ -6,3 +6,11 @@ services:
       MYSQL_DATABASE: mydb
     ports:
       - "3306:3306"
+    volumes:
+      - ./.docker/db:/var/lib/mysql
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/app
