@@ -26,26 +26,26 @@ model Event {
 }
 
 model Spot {
-  id          String   @id @default(cuid())
-  name        String
-  status      SpotStatus
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  eventId     String
-  event       Event    @relation(fields: [eventId], references: [id])
-  reservations ReservationHistory[]
-  tickets     Ticket[]
+  id            String   @id @default(cuid())
+  name          String
+  status        SpotStatus
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  eventId       String
+  Event         Event    @relation(fields: [eventId], references: [id])
+  reservations  ReservationHistory[]
+  Ticket        Ticket?
 }
 
 enum SpotStatus {
-  OPEN
-  CLOSED
+  AVAILABLE
+  RESERVED
 }
 
 model ReservationHistory {
   id          String   @id @default(cuid())
   email       String
-  ticketKind  TicketStatus
+  ticketKind  TicketKind
   status      TicketStatus
   spotId      String
   spot        Spot     @relation(fields: [spotId], references: [id])
@@ -54,20 +54,22 @@ model ReservationHistory {
 }
 
 enum TicketStatus {
-  PENDING
   CONFIRMED
   CANCELLED
+}
+
+enum TicketKind {
+  HALF
+  FULL
 }
 
 model Ticket {
   id          String   @id @default(cuid())
   email       String
   ticketKind  TicketStatus
-  status      TicketStatus
   spotId      String
   spot        Spot     @relation(fields: [spotId], references: [id])
   @@unique([spotId])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
 }
