@@ -32,7 +32,7 @@ model Spot {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   eventId       String
-  Event         Event    @relation(fields: [eventId], references: [id])
+  Event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   reservations  ReservationHistory[]
   Ticket        Ticket?
 }
@@ -48,7 +48,7 @@ model ReservationHistory {
   ticketKind  TicketKind
   status      TicketStatus
   spotId      String
-  spot        Spot     @relation(fields: [spotId], references: [id])
+  spot        Spot     @relation(fields: [spotId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -66,9 +66,9 @@ enum TicketKind {
 model Ticket {
   id          String   @id @default(cuid())
   email       String
-  ticketKind  TicketStatus
+  ticketKind  TicketKind
   spotId      String
-  spot        Spot     @relation(fields: [spotId], references: [id])
+  spot        Spot     @relation(fields: [spotId], references: [id], onDelete: Cascade)
   @@unique([spotId])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
